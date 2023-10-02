@@ -22,7 +22,7 @@ on:
         description: Live Deploy Time
         required: true
         options: 
-        - 2:00pm
+        - 2:30pm
         - 6:00pm
         - 6:30pm
         - 8:00pm
@@ -58,6 +58,7 @@ jobs:
           echo $(( $(date -f - +%s- <<< "today ${{ github.event.inputs.deploy_time }} MDT"$'\nnow') 0 ))
       - name: Wait until deploy time
         run: |
+          sleep $(( $(date -f - +%s- <<< "today ${{ github.event.inputs.deploy_time }} MDT"$'\nnow') 0 ))
           echo deploy to live process,
           echo Time is up, please continue
       - name: Carry on with deploy
