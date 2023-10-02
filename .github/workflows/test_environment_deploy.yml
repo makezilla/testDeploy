@@ -31,6 +31,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    environment: staging
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -51,8 +52,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Wait until deploy time
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo deploy to live process,
+          echo waiting for time selected: ${{ github.event.inputs.deploy_time }}.
+          echo $(( $(date -f - +%s- <<< "today ${{ github.event.inputs.deploy_time }} MDT"$'\nnow') 0 ))
           sleep $(( $(date -f - +%s- <<< "today ${{ github.event.inputs.deploy_time }} MDT"$'\nnow') 0 ))
       - name: Wait until deploy time
         run: |
