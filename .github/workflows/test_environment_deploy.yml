@@ -22,6 +22,7 @@ on:
         description: Live Deploy Time
         required: true
         options: 
+        - 2:00pm
         - 6:00pm
         - 6:30pm
         - 8:00pm
@@ -50,13 +51,16 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Runs a set of commands using the runners shell
+      - name: Start Live deploy
+        run: |
+          echo start deploy to live process,
+          echo next wait for time selected: ${{ github.event.inputs.deploy_time }}.
+          echo $(( $(date -f - +%s- <<< "today ${{ github.event.inputs.deploy_time }} MDT"$'\nnow') 0 ))
       - name: Wait until deploy time
         run: |
           echo deploy to live process,
-          echo waiting for time selected: ${{ github.event.inputs.deploy_time }}.
-          echo $(( $(date -f - +%s- <<< "today ${{ github.event.inputs.deploy_time }} MDT"$'\nnow') 0 ))
-          sleep $(( $(date -f - +%s- <<< "today ${{ github.event.inputs.deploy_time }} MDT"$'\nnow') 0 ))
-      - name: Wait until deploy time
+          echo Time is up, please continue
+      - name: Carry on with deploy
         run: |
           echo Carry on with the deploy to the live environment,
           echo the time is now.
