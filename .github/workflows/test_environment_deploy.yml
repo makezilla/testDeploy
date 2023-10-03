@@ -26,12 +26,33 @@ on:
         - 6:00pm
         - 6:30pm
         - 8:00pm
+      sitename:
+        type: choice
+        description: Select which site to deploy
+        required: true
+        default: sterling
+        options:
+        - sterling
+        - ewrportal
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  setup:
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Sets env vars for build if sterling
+        run: |
+          echo "DEPLOY_RUNNER=ubuntu-latest" >> $GITHUB_ENV
+        if: startsWith(github.event.inputs.sitename, 'sterling')
+      - name: Sets env vars for build if ewrportal
+        run: |
+          echo "DEPLOY_RUNNER=ubuntu-latest" >> $GITHUB_ENV
+        if: startsWith(github.event.inputs.sitename, 'ewrportal')
+
   # This workflow contains a job called "build" and another called "deploy_live" that deploys to the live environment
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: [ "${{env.DEPLOY_RUNNER}}" ]
+    needs: setup
     environment: Staging
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -45,7 +66,7 @@ jobs:
         
   deploy_live:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: [ "${{env.DEPLOY_RUNNER}}" ]
     needs: build
     environment: Live
     # Steps represent a sequence of tasks that will be executed as part of the job
