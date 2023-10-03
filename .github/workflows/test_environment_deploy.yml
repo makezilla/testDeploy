@@ -51,7 +51,7 @@ jobs:
   # This workflow contains a job called "build" and another called "deploy_live" that deploys to the live environment
   build:
     # The type of runner that the job will run on
-    runs-on: [ "${{env.DEPLOY_RUNNER}}" ]
+    runs-on: [ "${{ env.DEPLOY_RUNNER }}" ]
     needs: setup
     environment: Staging
 
@@ -66,7 +66,7 @@ jobs:
         
   deploy_live:
     # The type of runner that the job will run on
-    runs-on: [ "${{env.DEPLOY_RUNNER}}" ]
+    runs-on: [ "${{ env.DEPLOY_RUNNER }}" ]
     needs: build
     environment: Live
     # Steps represent a sequence of tasks that will be executed as part of the job
